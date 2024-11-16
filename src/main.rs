@@ -13,6 +13,21 @@ impl Account {
             balance: 0,
         }
     }
+
+
+    fn summary(&self) -> String {
+        format!("{} has a balance ({})", self.holder, self.balance)
+    }
+
+    fn deposit(&mut self, amount: i32) -> i32 {
+        self.balance += amount;
+        self.balance
+    }
+
+    fn withdraw(&mut self, amount: i32) -> i32 {
+        self.balance -= amount;
+        self.balance
+    }
 }
 
 #[derive(Debug)]
@@ -24,29 +39,69 @@ impl Bank {
     fn new() -> Self {
         Bank { accounts: vec![] }
     }
+
+    fn add_account(&mut self, account: Account) {
+        self.accounts.push(account);
+    }
+
+    fn total_balance(&self) -> i32 {
+        self.accounts.iter().map(|account| account.balance).sum()
+    }
+
+    fn summary(&self) -> Vec<String> {
+        self.accounts
+            .iter()
+            .map(|account| account.summary())
+            .collect::<Vec<String>>()
+    }
 }
+
+
 
 // fn print_account(account: Account) -> Account {
 //     println!("{:?}", account);
 //     account
 // }
-fn print_account(account: &Account) {
-    println!("{:?}", account);
-}
+// fn print_account(account: &Account) {
+//     println!("{:?}", account);
+// }
 
-fn change_account(account: &mut Account) {
-    account.balance += 10;
-}
+// fn change_account(account: &mut Account) {
+//     account.balance += 10;
+// }
+
+// fn make_and_print_account() -> Account {
+//     let account = Account::new(1, String::from("Me"));
+//     println!("{:?}", account);
+//
+//     account
+// }
 
 fn main() {
-    let bank = Bank::new();
-    let mut account = Account::new(
-        1,
-        String::from("me"));
 
-    // print_account(&account);
-    change_account(&mut account);
-    let mut test = account.id;
-    test += 10;
-    println!("{:?} {}", account, test);
+    let mut bank = Bank::new();
+    let mut account = Account::new(1, String::from("Alex"));
+
+    account.deposit(500);
+    account.withdraw(250);
+
+    // println!("{}", account.summary());
+
+    bank.add_account(account);
+    println!("{:#?}", bank.summary());
+    println!("{}", bank.total_balance());
+
+    // let account_ref = make_and_print_account();
+    // println!("{:?}", account_ref.balance);
+    //
+    // let bank = Bank::new();
+    // let mut account = Account::new(
+    //     1,
+    //     String::from("me"));
+    //
+    // // print_account(&account);
+    // change_account(&mut account);
+    // let mut test = account.id;
+    // test += 10;
+    // println!("{:?} {}", account, test);
 }
